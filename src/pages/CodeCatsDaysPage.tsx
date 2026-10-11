@@ -19,7 +19,7 @@ const TIERS = [
   { name: 'Trailblazer', kind: 'Sponsor bronce' },
 ];
 const SPONSOR_MESSAGE = '¡Hola Code Cats Studio! Quiero que nuestra organización sea sponsor de Code Cats Days 2026 (Expedition 01). ¿Me cuentan más sobre los niveles Expedition Lead, Pathfinder y Trailblazer?';
-const COMMUNITY_MESSAGE = '¡Hola Code Cats Studio! Somos una comunidad tech y nos encantaría sumarnos como comunidad aliada a Code Cats Days 2026 (Expedition 01). ¿Cómo podemos participar?';
+const COMMUNITY_FORM_URL = 'https://forms.gle/698u1Uwvwd23VaRC6';
 const whatsappLink = (message: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
 // Only the timer re-renders each second; animation and page layout remain stable.
@@ -84,18 +84,6 @@ function Band() {
 
 export default function CodeCatsDaysPage() {
   const [active, setActive] = useState<string>('inicio');
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    try {
-      const saved = localStorage.getItem('ccd-theme');
-      if (saved === 'light' || saved === 'dark') return saved;
-    } catch { /* Storage can be unavailable in private browser contexts. */ }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
-  const changeTheme = () => {
-    const next = theme === 'light' ? 'dark' : 'light';
-    setTheme(next);
-    try { localStorage.setItem('ccd-theme', next); } catch { /* The toggle still works without persistence. */ }
-  };
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => { if (entry.isIntersecting) setActive(entry.target.id); });
@@ -115,7 +103,7 @@ export default function CodeCatsDaysPage() {
   }, []);
 
   return (
-    <EventMotion theme={theme}>
+    <EventMotion>
       <a className="ccd-skip" href="#contenido-evento">Saltar al contenido</a>
       <header className="ccd-nav">
         <div className="ccd-container ccd-nav__inner">
@@ -124,7 +112,6 @@ export default function CodeCatsDaysPage() {
           </a>
           <nav className="ccd-nav__links" aria-label="Secciones">
             {NAV_LINKS.map((link) => <a key={link.id} className="ccd-nav__link" href={`#${link.id}`} aria-current={active === link.id ? 'location' : undefined}>{link.label}</a>)}
-            <button className="ccd-theme" type="button" onClick={changeTheme} aria-label={`Cambiar a tema ${theme === 'light' ? 'oscuro' : 'claro'}`}>Tema</button>
           </nav>
         </div>
       </header>
@@ -147,26 +134,8 @@ export default function CodeCatsDaysPage() {
 
         <Band />
 
-        <section className="ccd-experience ccd-container" aria-labelledby="experience-title">
-          <div className="ccd-experience__intro" data-reveal>
-            <h2 id="experience-title" className="ccd-heading">Las ideas salen<br />del escritorio.</h2>
-            <p className="ccd-text">Un festival tech para aprender haciendo y encontrar a quienes también quieren construir.</p>
-          </div>
-          <div className="ccd-experience__list" data-reveal>
-            <article><h3>Explora</h3><p>Descubre nuevas posibilidades en el mundo tech.</p></article>
-            <article><h3>Construye</h3><p>Convierte lo que aprendes en proyectos reales.</p></article>
-            <article><h3>Comparte</h3><p>Conecta ideas y conocimientos con la comunidad.</p></article>
-          </div>
-        </section>
-
         <section id="sponsors" className="ccd-sponsors ccd-tex">
           <div className="ccd-container">
-            <div className="ccd-sponsors__intro" data-reveal>
-              <p className="ccd-tag">Alianzas</p>
-              <h2 className="ccd-heading">Impulsan esta expedición</h2>
-              <p className="ccd-text">Organizaciones que creen en el aprendizaje práctico y el talento emergente.</p>
-              <img className="ccd-wordmark" src="/logo-transparent.png" width={1088} height={348} loading="lazy" alt="Code Cats Studio" />
-            </div>
             <div className="ccd-section-heading" data-reveal>
               <h2 className="ccd-title">Nuestros<br /><span>Sponsors</span></h2>
               <p className="ccd-text">Estamos sumando organizaciones que harán posible esta expedición. Tu equipo puede ser parte.</p>
@@ -209,7 +178,7 @@ export default function CodeCatsDaysPage() {
           <div className="ccd-container ccd-invite" data-reveal>
             <h2 className="ccd-heading">¿Sumamos tu comunidad?</h2>
             <p className="ccd-text">Conectemos talentos, ideas y comunidades tech.</p>
-            <a className="ccd-btn ccd-btn--arrow" href={whatsappLink(COMMUNITY_MESSAGE)} target="_blank" rel="noopener noreferrer">Quiero ser comunidad aliada <span aria-hidden="true">↗</span></a>
+            <a className="ccd-btn ccd-btn--arrow" href={COMMUNITY_FORM_URL} target="_blank" rel="noopener noreferrer">Quiero ser comunidad aliada <span aria-hidden="true">↗</span></a>
           </div>
         </section>
       </main>

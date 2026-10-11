@@ -8,7 +8,7 @@ import { useGSAP } from '@gsap/react';
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /** Scoped event choreography. The static markup stays usable without animation. */
-export default function EventMotion({ children, theme }: { children: ReactNode; theme: 'light' | 'dark' }) {
+export default function EventMotion({ children }: { children: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -57,5 +57,5 @@ export default function EventMotion({ children, theme }: { children: ReactNode; 
     };
   }, { scope: root });
 
-  return <div ref={root} className="ccd" data-theme={theme}>{children}</div>;
+  return <div ref={root} className="ccd">{children}</div>;
 }
